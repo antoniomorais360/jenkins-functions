@@ -37,25 +37,16 @@ function check_cpu () {
 ipnumber=$1
 
 #CPU variables
-cpulimit=80
 test_duration=5
-cpuusage=100
 
 
-	cpu_idle=$(sudo -u ubuntu ssh $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpu_idle=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
 	
 	check_cpu=$cpuusage
 	
 	printf "$1 está usando $cpuusage% de CPU\n\n"
-
-
-if [ "$cpuusage" -gt "$cpulimit" ]; then 
-	exit 1        
-fi
-
-
 
 }
 
