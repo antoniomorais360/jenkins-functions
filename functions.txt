@@ -42,10 +42,10 @@ test_duration=5
 cpuusage=100
 
 
-	cpuusage=$(sudo -u ubuntu ssh $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
-	cpuusage=$(echo 100 - $cpuusage | bc)
+	cpu_idle=$(sudo -u ubuntu ssh $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
-	printf "$1 está usando $cpuusage%% de CPU\n\n"
+	printf "$1 está usando $cpuusage% de CPU\n\n"
 
 
 if [ "$cpuusage" -gt "$cpulimit" ]; then 
