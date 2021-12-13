@@ -25,7 +25,7 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
     echo ""
   fi;
 
-pingurl=$1 = $response_code 
+pingurl=$response_code 
 
 }
 
