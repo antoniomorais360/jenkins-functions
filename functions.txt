@@ -61,10 +61,20 @@ fi
 function aws_running_instances () {
 
 aws ec2 describe-instances  --filter "Name=instance-state-name,Values=running" \
-	--query "Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, InstanceType, State.Name, Tags[?Key=='Name'].Value|[0], Platform]"  --output text > aws_running_instances.txt
+	--query "Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, InstanceType, State.Name, Tags[?Key=='Name'].Value|[0],Tags[?Key=='SO'].Value|[0], Platform]"  --output text > aws_running_instances.txt
+
 
 cat aws_running_instances.txt | awk '{print $6, $2}'  > aws_running_instances_name_priv_ip.txt
 
 cat aws_running_instances.txt | awk '{print $6, $3}'  > aws_running_instances_name_public_ip.txt
 
 }
+
+
+
+
+
+
+
+
+
