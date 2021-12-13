@@ -45,6 +45,9 @@ cpuusage=100
 	cpu_idle=$(sudo -u ubuntu ssh $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
+	
+	check_cpu=$cpuusage
+	
 	printf "$1 está usando $cpuusage% de CPU\n\n"
 
 
