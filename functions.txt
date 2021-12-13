@@ -48,10 +48,11 @@ cpuusage=100
 	printf "$1 está usando $cpuusage%% de CPU\n\n"
 
 
-
-if [ "$cpuusage" -gt "$cpulimit" ]; then 
-	exit 1        
-fi
+test=$(bc <<<"$cpuusage >= $cpulimit")
+echo $test
+#if [ "$cpuusage" -gt "$cpulimit" ]; then 
+#	exit 1        
+#fi
 
 
 
