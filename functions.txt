@@ -10,7 +10,7 @@ url2check=$2
 #PING url variables
 connecttimeout=30
 
-
+echo 
 echo Testing $1
 
 response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeout $connecttimeout --no-keepalive --output /dev/null  $url2check`
@@ -20,7 +20,7 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
 			printf "$1 is *** OFFLINE *** \n"
             
   else
-  	printf "$1 is ONLINE\n"
+  	printf "$1 is ONLINE ($response_code)\n"
     echo ""
   fi;
 
