@@ -19,7 +19,7 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
 
 			printf "$1 is *** OFFLINE *** \n"
             echo $1 >> /tmp/ping-sites-inativos.txt
-           	varexit=1
+
   else
 	echo 
   	printf "$1 is ONLINE\n"
@@ -31,6 +31,7 @@ echo *** OFFILNE SITES ***
 cat /tmp/ping-sites-inativos.txt
 echo 
 echo
+exit 1
 }
 
 
