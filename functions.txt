@@ -1,5 +1,5 @@
 
-function pingurl () {
+function ping_url () {
 
 #Example: pingurl "My Site Friendly Name" https://mysite.com
 
@@ -25,8 +25,46 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
     echo ""
   fi;
 
-pingurl=$response_code 
+ping_url=$response_code 
 
 }
 
 
+function check_cpu () {
+
+sitename=$1
+ipnumber=$2
+
+
+#CPU variables
+cpulimit=80
+timing=7
+cpuusage=100
+
+
+
+	cpuusage=$(sudo -u ubuntu ssh $2 mpstat $timing 1 | tail -1|awk '{print int($2)}')
+	cpuusage=$(echo ${cpuusage%,*})
+	printf "$1 está usando $cpuusage%% de CPU\n\n"
+
+
+
+if (( $cpuusage > $cpulimit )); then 
+	exit 1        
+fi
+
+
+
+}
+
+
+function aws_running_instances () {
+
+aws ec2 describe-instances  --filter "Name=instance-state-name,Values=running" \
+	--query "Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, InstanceType, State.Name, Tags[?Key=='Name'].Value|[0], Platform]"  --output text > aws_running_instances.txt
+
+cat aws_running_instances.txt | awk '{print $6, $2}'  > aws_running_instances_name_priv_ip.txt
+
+cat aws_running_instances.txt | awk '{print $6, $3}'  > aws_running_instances_name_public_ip.txt
+
+}
