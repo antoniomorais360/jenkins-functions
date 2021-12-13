@@ -47,7 +47,7 @@ cpuusage=100
 
 
 
-if (( $cpuusage > $cpulimit )); then 
+if (( $cpuusage -gt $cpulimit )); then 
 	exit 1        
 fi
 
