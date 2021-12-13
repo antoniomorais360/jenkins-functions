@@ -32,9 +32,7 @@ ping_url=$response_code
 
 function check_cpu () {
 
-sitename=$1
-ipnumber=$2
-
+ipnumber=$1
 
 #CPU variables
 cpulimit=80
@@ -43,7 +41,7 @@ cpuusage=100
 
 
 
-	cpuusage=$(sudo -u ubuntu ssh $2 mpstat $timing 1 | tail -1|awk '{print int($2)}')
+	cpuusage=$(sudo -u ubuntu ssh $1 mpstat $timing 1 | tail -1|awk '{print int($2)}')
 	cpuusage=$(echo ${cpuusage%,*})
 	printf "$1 está usando $cpuusage%% de CPU\n\n"
 
