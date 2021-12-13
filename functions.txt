@@ -17,14 +17,20 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
   
   if [ "$response_code" != "200" ] && [ "$response_code" != "404" ] && [ "$response_code" != "401" ] && [ "$response_code" != "301" ] ; then
 
-			printf "$1 is *** OFFLINE *** in $line\n"
+			printf "$1 is *** OFFLINE *** \n"
             echo $1 >> /tmp/ping-sites-inativos.txt
            	varexit=1
   else
+	echo 
   	printf "$1 is ONLINE\n"
     echo ""
   fi;
 
+echo
+echo *** OFFILNE SITES ***
+cat /tmp/ping-sites-inativos.txt
+echo 
+echo
 }
 
 
