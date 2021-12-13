@@ -46,7 +46,7 @@ test_duration=5
 	
 	check_cpu=$cpuusage
 	
-	printf "$1 está usando $cpuusage%% de CPU\n\n"
+	printf "$1 está usando $cpuusage%% de CPU\n"
 
 }
 
