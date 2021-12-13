@@ -41,8 +41,6 @@ cpulimit=80
 test_duration=5
 cpuusage=100
 
-echo 100 - $(mpstat 20 1 | tail -1 | awk '{print $12}') | bc
-
 
 	cpuusage=$(sudo -u ubuntu ssh $1 mpstat $test_duration 1 | tail -1 |awk '{print $12}')
 	cpuusage=$(echo 100 - $cpuusage | bc)
