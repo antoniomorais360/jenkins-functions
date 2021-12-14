@@ -27,6 +27,7 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
 
 ping_url=$response_code 
 
+
 }
 
 
@@ -46,7 +47,7 @@ test_duration=5
 	
 	check_cpu=$cpuusage
 	
-	printf "$1 está usando $cpuusage%% de CPU\n"
+	printf "$1 is using $cpuusage%% of CPU\n"
 
 }
 
@@ -72,7 +73,7 @@ pathvolume=$3
 
 	echo Testing $instancename  $hostip
 	test_volume=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no -o LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
-
+	printf "$1 is using $test_volume%% of its HD\n"
 	
 }
 
