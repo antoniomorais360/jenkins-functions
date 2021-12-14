@@ -63,18 +63,25 @@ aws ec2 describe-instances  --filter "Name=instance-state-name,Values=running" \
 
 function test_volume() {
 
-#Example: test_volume "Wordpress" /
+#Example: test_volume "Wordpress" 192.168.0.1 /
 
 instancename=$1
 hostip=$2
 pathvolume=$3
 
 
+echo $instancename - $hostip
 
-	echo $instancename - $hostip
-	test_volume=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no -o LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
-	printf "$test_volume%%\n"
+if [ "$hostip" = "localhost" ]; then
 	
+	test_volume=$(df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]")
+else	
+	test_volume=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no -o LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
+	
+fi;	
+
+printf "$test_volume%%\n"
+
 }
 
 
