@@ -73,7 +73,7 @@ pathvolume=$3
 
 	echo Testing $instancename  $hostip
 	test_volume=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no -o LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
-	printf "$1 is using $test_volume%% of its HD\n"
+	printf "$test_volume%%\n"
 	
 }
 
