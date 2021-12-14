@@ -1,7 +1,7 @@
 
 function ping_url () {
 
-#Example: pingurl "My Site Friendly Name" https://mysite.com
+#Example: ping_url "My Site Friendly Name" https://mysite.com
 
 sitename=$1
 url2check=$2
@@ -60,7 +60,21 @@ aws ec2 describe-instances  --filter "Name=instance-state-name,Values=running" \
 
 
 
+function test_volume() {
 
+#Example: test_volume "Wordpress" /
+
+instancename=$1
+hostip=$2
+pathvolume=$3
+
+
+
+	echo Testing $instancename  $hostip
+	vroot=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
+
+	
+}
 
 
 
