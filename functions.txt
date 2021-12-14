@@ -71,7 +71,7 @@ pathvolume=$3
 
 
 
-	echo Testing $instancename  $hostip
+	echo $instancename ($hostip)
 	test_volume=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no -o LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
 	printf "$test_volume%%\n"
 	
