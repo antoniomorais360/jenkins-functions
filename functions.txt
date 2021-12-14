@@ -1,6 +1,5 @@
 
 function ping_url () {
-
 #Example: ping_url "My Site Friendly Name" https://mysite.com
 
 sitename=$1
@@ -32,16 +31,20 @@ ping_url=$response_code
 
 
 function check_cpu () {
-
-#apt install -y sysstat (mpstat)
+#Requirement: apt install -y sysstat (mpstat)
+#Example: 	check_cpu ip linux_user 
+#			check_cpu 192.168.0.1 ubuntu
  
 ipnumber=$1
+linux_user=$2
+linux_user=${linux_user:-ubuntu}
+
 
 #CPU variables
 test_duration=5
 
 
-	cpu_idle=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpu_idle=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
 	
