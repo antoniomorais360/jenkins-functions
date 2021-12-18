@@ -1,6 +1,7 @@
 function aws_iid_tagname() {
 	aws_iid_tagname=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" \
 	--output text --query 'Reservations[*].Instances[*].InstanceId')
+	echo $aws_iid_tagname
 }
 
 function aws_running_instances () {
@@ -8,7 +9,7 @@ function aws_running_instances () {
 aws ec2 describe-instances  \
 	--filter "Name=instance-state-name,Values=running" \
 	--query "Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, InstanceType, State.Name, Tags[?Key=='Name'].Value|[0],Tags[?Key=='SO'].Value|[0], Platform]" \
-	--output text > aws_running_instances.txt
+	--output text 
 
 }
 
