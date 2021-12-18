@@ -1,5 +1,5 @@
 function aws_iid_tagname() {
-	iid=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" \
+	aws_iid_tagname=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" \
 	--output text --query 'Reservations[*].Instances[*].InstanceId')
 }
 
