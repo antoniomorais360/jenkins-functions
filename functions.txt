@@ -1,7 +1,6 @@
 function aws_iid_tagname() {
 	iid=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" \
-	"Name=instance-state-name,Values=running"  | sed -e 's/^\s*//' -e '/^$/d'  | grep PrivateIpAddress\": \
-	| grep  -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' | sort | head -1)
+	--output text --query 'Reservations[*].Instances[*].InstanceId')
 }
 
 function aws_running_instances () {
