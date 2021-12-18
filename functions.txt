@@ -62,6 +62,7 @@ aws ec2 describe-instances  \
 
 }
 
+
 function aws_elastic_ips () {
 
 aws ec2 describe-addresses \
@@ -69,7 +70,6 @@ aws ec2 describe-addresses \
 	--output text 
 
 }
-
 
 
 function test_volume() {
@@ -96,6 +96,14 @@ printf "$test_volume%%\n"
 }
 
 
+function run_aws-variaveis-instancias() {
 
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		echo Atualizando aws-variaveis-instancias
+		curl -X POST http://$USERNAME:$TOKEN@localhost:8080/job/aws-variaveis-instancias/build?token=$TOKENJOB
+		exit 1
+	fi
 
+}
 
