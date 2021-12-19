@@ -111,3 +111,12 @@ fi;
 printf "$test_volume%%\n"
 
 }
+
+
+function ssl_expire() {
+site=$1
+PORT="443"
+openssl s_client -servername $site -connect $site:$PORT \
+| openssl x509 -noout -dates 
+}
+
