@@ -1,3 +1,6 @@
+
+export ownip=$(hostname -I | awk '{print $1}')
+
 function aws_iid_tagname() {
 	aws_iid_tagname=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" \
 	--output text --query 'Reservations[*].Instances[*].InstanceId')
@@ -13,7 +16,6 @@ aws ec2 describe-instances  \
 
 }
 
-
 function aws_elastic_ips () {
 
 aws ec2 describe-addresses \
@@ -22,8 +24,7 @@ aws ec2 describe-addresses \
 
 }
 
-
-function run_aws-variaveis-instancias() {
+function run_aws_variables_instances() {
 
 	ret=$?
 	if [ $ret -ne 0 ]; then
@@ -33,7 +34,6 @@ function run_aws-variaveis-instancias() {
 	fi
 
 }
-
 
 function check_cpu () {
 #Requirement: apt install -y sysstat (mpstat)
@@ -58,7 +58,6 @@ test_duration=5
 	printf "$1 is using $cpuusage%% of CPU\n"
 
 }
-
 
 function ping_url () {
 #Example: ping_url "My Site Friendly Name" https://mysite.com
@@ -88,7 +87,6 @@ ping_url=$response_code
 
 }
 
-
 function check_hdd_free_space() {
 
 #Example: check_hdd_free_space "Wordpress" 192.168.0.1 /
@@ -112,8 +110,7 @@ printf "$check_hdd_free_space%%\n"
 
 }
 
-
-function ssl_expire() {
+function check_ssl_expire() {
 site=$1
 PORT="443"
 
@@ -122,25 +119,67 @@ date --date="$(echo | openssl s_client -servername $site -connect $site:$PORT  2
 	
 }
 
+function run_hdd_clean_up () {
 
-function limpezasbasicas () {
+ipnumber=$1
+linux_user=$2
+linux_user=${linux_user:-ubuntu}
 
-
-if [ "$hostip" == "175.0.1.221" ]  
+if [ "$ipnumber" == "$ownip" ]  
     then
-    	echo "Limpezas Jenkins"
-		sudo apt-get -y clean && sudo apt-get -y autoclean && sudo apt-get -y autoremove
-    	sudo find /mnt/backup/pgdump -type f -mtime +80 -exec rm -f {} \;
-        sudo find /mnt/backup/pgdump -type f -mtime +30 -name amp-fox_mail* -exec rm -f {} \;
-        
+		sudo apt -y clean && sudo apt -y autoclean && sudo apt -y autoremove
 	else
-      sudo ssh -o LogLevel=error $usuario@$hostip sudo apt clean && sudo apt autoclean && sudo apt autoremove
-      sudo ssh -o LogLevel=error $usuario@$hostip sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size +20M -type f  -exec du -h  {} + | sort -r -h
-      sudo ssh -o LogLevel=error $usuario@$hostip sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
-      #sudo -u ubuntu ssh $pipfoxapp sudo find / -not -path "/mnt/*" -size +20M -type f  -exec du -h  {} + | sort -r -h
-      #sudo -u ubuntu ssh $pipfoxapp sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
-    
-    fi
-    
+      sudo ssh -o LogLevel=error $linux_user@$ipnumber sudo apt clean && sudo apt autoclean && sudo apt autoremove  
+ fi
+}
+
+function check_hdd_biggest () {
+
+ipnumber=$1
+linux_user=$2
+linux_user=${linux_user:-ubuntu}
+
+min_size_list=$3
+min_size_list=${min_size_list:-20M}
+
+
+if [ "$ipnumber" == "$ownip" ]  
+    then
+        sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size +$(min_size_list) -type f  -exec du -h  {} + | sort -r -h
+		sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
+	else
+      sudo ssh -o LogLevel=error $linux_user@$ipnumber sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size ++$(min_size_list)  -type f  -exec du -h  {} + | sort -r -h
+      sudo ssh -o LogLevel=error $linux_user@$ipnumber sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
+ fi
     
 }
+
+function run_hdd_deletions () {
+
+folder=$1
+filename=$2
+days_expiration=$3
+
+	sudo find $folder -type f -mtime +$(days_expiration) -name $filename -exec rm -f {} \;
+
+}
+
+function aws_expand_hdd () {
+
+#to be used after resize image in instance-state-name
+#Ex: aws_expand_hdd nvme0n1 nvme0n1p1
+dev_name=$1
+dev_partition=$2
+
+	sudo apt install cloud-guest-utils
+	lsblk
+	df -h
+	sudo growpart /dev/$dev_name 1
+	sudo resize2fs /dev/$dev_partition
+
+}
+
+
+
+
+
