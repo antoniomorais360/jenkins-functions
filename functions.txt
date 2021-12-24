@@ -49,7 +49,7 @@ linux_user=${linux_user:-ubuntu}
 test_duration=5
 
 
-	cpu_idle=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no $1 mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpu_idle=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
 	
@@ -129,11 +129,13 @@ if [ "$ipnumber" == "$ownip" ]
     then
 		sudo apt -y clean && sudo apt -y autoclean && sudo apt -y autoremove
 	else
-      sudo ssh -o LogLevel=error $linux_user@$ipnumber sudo apt clean && sudo apt autoclean && sudo apt autoremove  
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber sudo apt clean && sudo apt autoclean && sudo apt autoremove  
  fi
 }
 
 function check_hdd_biggest () {
+
+#Ex: check_hdd_biggest 
 
 ipnumber=$1
 linux_user=$2
@@ -148,8 +150,8 @@ if [ "$ipnumber" == "$ownip" ]
         sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size +$(min_size_list) -type f  -exec du -h  {} + | sort -r -h
 		sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
 	else
-      sudo ssh -o LogLevel=error $linux_user@$ipnumber sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size ++$(min_size_list)  -type f  -exec du -h  {} + | sort -r -h
-      sudo ssh -o LogLevel=error $linux_user@$ipnumber sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size ++$(min_size_list)  -type f  -exec du -h  {} + | sort -r -h
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
  fi
     
 }
