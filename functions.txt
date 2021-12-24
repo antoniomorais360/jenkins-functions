@@ -23,6 +23,18 @@ aws ec2 describe-addresses \
 }
 
 
+function run_aws-variaveis-instancias() {
+
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		echo Atualizando aws-variaveis-instancias
+		curl -X POST http://$USERNAME:$TOKEN@localhost:8080/job/aws-variaveis-instancias/build?token=$TOKENJOB
+		exit 1
+	fi
+
+}
+
+
 function check_cpu () {
 #Requirement: apt install -y sysstat (mpstat)
 #Example: 	check_cpu ip linux_user 
@@ -77,19 +89,7 @@ ping_url=$response_code
 }
 
 
-function run_aws-variaveis-instancias() {
-
-	ret=$?
-	if [ $ret -ne 0 ]; then
-		echo Atualizando aws-variaveis-instancias
-		curl -X POST http://$USERNAME:$TOKEN@localhost:8080/job/aws-variaveis-instancias/build?token=$TOKENJOB
-		exit 1
-	fi
-
-}
-
-
-function test_volume() {
+function check_hdd_free_space() {
 
 #Example: test_volume "Wordpress" 192.168.0.1 /
 
@@ -122,3 +122,25 @@ date --date="$(echo | openssl s_client -servername $site -connect $site:$PORT  2
 	
 }
 
+
+function limpezasbasicas () {
+
+
+if [ "$hostip" == "175.0.1.221" ]  
+    then
+    	echo "Limpezas Jenkins"
+		sudo apt-get -y clean && sudo apt-get -y autoclean && sudo apt-get -y autoremove
+    	sudo find /mnt/backup/pgdump -type f -mtime +80 -exec rm -f {} \;
+        sudo find /mnt/backup/pgdump -type f -mtime +30 -name amp-fox_mail* -exec rm -f {} \;
+        
+	else
+      sudo ssh -o LogLevel=error $usuario@$hostip sudo apt clean && sudo apt autoclean && sudo apt autoremove
+      sudo ssh -o LogLevel=error $usuario@$hostip sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size +20M -type f  -exec du -h  {} + | sort -r -h
+      sudo ssh -o LogLevel=error $usuario@$hostip sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
+      #sudo -u ubuntu ssh $pipfoxapp sudo find / -not -path "/mnt/*" -size +20M -type f  -exec du -h  {} + | sort -r -h
+      #sudo -u ubuntu ssh $pipfoxapp sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
+    
+    fi
+    
+    
+}
