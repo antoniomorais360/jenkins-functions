@@ -125,7 +125,7 @@ ipnumber=$1
 linux_user=$2
 linux_user=${linux_user:-ubuntu}
 
-cleanup_cmd="sudo apt -y clean && sudo apt -y autoclean && sudo apt -y autoremove"
+cleanup_cmd="sudo apt-get -y clean && sudo apt-get -y autoclean && sudo apt-get -y autoremove"
 
 if [ "$ipnumber" == "$ownip" ]  
     then
