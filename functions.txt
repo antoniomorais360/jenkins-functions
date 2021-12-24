@@ -144,15 +144,17 @@ linux_user=${linux_user:-ubuntu}
 min_size_list=$3
 min_size_list=${min_size_list:-20M}
 
+findfiles='sudo find / -not -path "/mnt/*" -not -path "/proc/*" \
+		-not -path "/swapfile/*" -size +${min_size_list}  -type f  -exec du -h  {} + | sort -r -h'
+findpaths='sudo du -hs /*  --exclude=/mnt/*  --exclude=/proc/* | sort -rh | head -10'
 
 if [ "$ipnumber" == "$ownip" ]  
     then
         sudo find / -not -path "/mnt/*" -not -path "/proc/*" -not -path "/swapfile" -size +${min_size_list} -type f  -exec du -h  {} + | sort -r -h
 		sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10
 	else
-      sudo -u $linux_user ssh -o LogLevel=error $ipnumber 'sudo find / -not -path "/mnt/*" -not -path "/proc/*" \
-		-not -path "/swapfile/*" -size +${min_size_list}  -type f  -exec du -h  {} + | sort -r -h'
-      sudo -u $linux_user ssh -o LogLevel=error $ipnumber 'sudo du -hs /*  --exclude=/mnt/*  | sort -rh | head -10'
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $findfiles
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $findpaths
  fi
     
 }
