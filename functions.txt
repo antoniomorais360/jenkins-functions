@@ -141,9 +141,9 @@ ipnumber=$1
 linux_user=$2
 linux_user=${linux_user:-ubuntu}
 
-findfiles='sudo find / -not -path "/mnt/*" -not -path "/proc/*" \
-		-not -path "/swapfile/*" -size +20M  -type f  -exec du -h  {} + | sort -r -h'
-findpaths='sudo du -hs /*  --exclude=/mnt/*  --exclude=/proc/* | sort -rh | head -10'
+findfiles="sudo find / -not -path `/mnt/*` -not -path `/proc/*` \
+		-not -path `/swapfile/*` -size +20M  -type f  -exec du -h  {} + | sort -r -h"
+findpaths="sudo du -hs /*  --exclude=/mnt/*  --exclude=/proc/* | sort -rh | head -10"
 
 if [ "$ipnumber" == "$ownip" ]  
     then
