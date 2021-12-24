@@ -91,7 +91,7 @@ ping_url=$response_code
 
 function check_hdd_free_space() {
 
-#Example: test_volume "Wordpress" 192.168.0.1 /
+#Example: check_hdd_free_space "Wordpress" 192.168.0.1 /
 
 instancename=$1
 hostip=$2
@@ -102,13 +102,13 @@ echo $instancename - $hostip
 
 if [ "$hostip" = "localhost" ]; then
 	
-	test_volume=$(df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]")
+	check_hdd_free_space=$(df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]")
 else	
-	test_volume=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no -o LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
+	check_hdd_free_space=$(sudo -u ubuntu ssh -o StrictHostKeyChecking=no -o LogLevel=error $2 df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
 	
 fi;	
 
-printf "$test_volume%%\n"
+printf "$check_hdd_free_space%%\n"
 
 }
 
