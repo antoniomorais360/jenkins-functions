@@ -221,7 +221,8 @@ function time_load_site (){
 
 site=$1
 
-time_load_site=$(time wget --debug --verbose --directory-prefix=/tmp -erobots=off --output-file=/tmp/logfile.txt --page-requisites --no-cache --delete-after --level=inf --span-hosts $site)
+time_load_site=$(time wget --debug --verbose --directory-prefix=/tmp -erobots=off --output-file=/tmp/logfile.txt --page-requisites --no-cache --delete-after --level=inf --span-hosts --restrict-file-names=nocontrol --no-iri $site)
+
 
 echo $time_load_site
 
