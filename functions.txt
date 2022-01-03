@@ -125,13 +125,13 @@ ipnumber=$1
 linux_user=$2
 linux_user=${linux_user:-ubuntu}
 
-cleanup_cmd="sudo apt-get -y clean && sudo apt-get -y autoclean && sudo apt-get -y autoremove"
+cmd_run="sudo apt-get -y clean && sudo apt-get -y autoclean && sudo apt-get -y autoremove"
 
 if [ "$ipnumber" == "$ownip" ]  
     then
-		eval $cleanup_cmd
+		eval $cmd_run
 	else
-      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $cleanup_cmd  
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $cmd_run  
  fi
 }
 
@@ -182,6 +182,43 @@ dev_partition=$2
 	sudo resize2fs /dev/$dev_partition
 
 }
+
+function run_reboot () {
+
+ipnumber=$1
+linux_user=$2
+linux_user=${linux_user:-ubuntu}
+
+cmd_run="sudo reboot"
+
+if [ "$ipnumber" == "$ownip" ]  
+    then
+		sudo $cmd_run
+	else
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $cmd_run
+ fi
+}
+
+function time_download () {
+#usage time_download https://mysite.com/myfile.txt 10
+#$1 file, $2 times to test
+
+file=$1
+times=$2
+
+average=0
+for i in $(seq $times); do
+	newvalue=$(curl -o /dev/null --http1.1 -sS -w %{time_total}\\n  $file ) 
+	newvalue=$(echo $newvalue |  sed -e "s/,/./g")
+	average=$(echo "scale=3;$average + $newvalue" | bc)
+done
+echo average time is "scale=3;$average / $times" | bc
+
+}
+
+
+
+
 
 
 
