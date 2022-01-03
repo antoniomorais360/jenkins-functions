@@ -200,8 +200,8 @@ if [ "$ipnumber" == "$ownip" ]
 }
 
 function time_download () {
-#usage time_download https://mysite.com/myfile.txt 10
-#$1 file, $2 times to test
+#usage time_download https://mysite.com/myfile.txt 5
+#$1 file, $2 times to test or leave empty for 10 times
 
 file=$1
 times=${times:-10}
@@ -212,6 +212,7 @@ for i in $(seq $times); do
 	newvalue=$(echo $newvalue |  sed -e "s/,/./g")
 	average=$(echo "scale=3;$average + $newvalue" | bc)
 done
+echo $file
 echo "scale=3;$average / $times" | bc
 
 }
