@@ -204,7 +204,7 @@ function time_download () {
 #$1 file, $2 times to test
 
 file=$1
-times=$2
+times=${times:-10}
 
 average=0
 for i in $(seq $times); do
