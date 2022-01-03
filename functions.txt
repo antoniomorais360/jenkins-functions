@@ -212,7 +212,7 @@ for i in $(seq $times); do
 	newvalue=$(echo $newvalue |  sed -e "s/,/./g")
 	average=$(echo "scale=3;$average + $newvalue" | bc)
 done
-echo average time is "scale=3;$average / $times" | bc
+echo "scale=3;$average / $times" | bc
 
 }
 
