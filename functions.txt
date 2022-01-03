@@ -217,7 +217,30 @@ echo "scale=3;$average / $times" | bc
 
 }
 
+function time_load_site (){
 
+time_load_site=$(time wget --debug --verbose --directory-prefix=/tmp --output-file=/tmp/logfile.txt --page-requisites --no-cache --delete-after --level=inf --span-hosts $site)
+
+echo $time_load_site
+
+
+# Explained
+#https://www.computerhope.com/unix/wget.htm
+#wget \
+#	-r --recursive \ # Download the whole site. \ 
+#    -p --page-requisites \ # Get all assets/elements (CSS/JS/images).
+#	--spider stops wget from downloading the page.
+#	-nd, short for --no-directories, prevents wget from creating a hierarchy of directories on your server.
+#   -H --span-hosts \ # Include necessary assets from offsite as well.
+#    --convert-links \ # Update links to still work in the static version.
+#    --domains yoursite.com \ # Do not follow links outside this domain.
+#	-nv, --no-verbose, stops wget from outputting extra information that is unnecessary for identifying broken links.
+#    --no-parent \ # Don't follow links outside the directory you pass in.
+#         yoursite.com/whatever/path # The URL to download
+#	-l 1 is short for --level. By default, wget crawls up to five levels deep from the initial URL, but here we set it to one.
+#	-w 2, short for --wait, instructs wget to wait 2 seconds between requests to avoid bombarding the server, minimizing any performance impact.
+
+}
 
 
 
