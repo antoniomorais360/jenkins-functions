@@ -249,7 +249,7 @@ function site_links () {
 site=$1
 wget --spider --recursive --no-verbose --output-file=wgetlog.txt $site
 sed -n "s@.\+ URL:\([^ ]\+\) .\+@\1@p" wgetlog.txt | sed "s@&@\&amp;@" > sedlog.txt
-awk '!seen[$0]++' sedlog.txt
+awk '!seen[$0]++' sedlog.txt > /dev/null #remove duplicate lines
 cat sedlog.txt | sort
 }
 
