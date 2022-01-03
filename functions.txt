@@ -230,7 +230,7 @@ echo $time_load_site
 #https://www.computerhope.com/unix/wget.htm
 #wget \
 #	-r --recursive \ # Download the whole site. \ 
-#    -p --page-requisites \ # Get all assets/elements (CSS/JS/images).
+#   -p --page-requisites \ # Get all assets/elements (CSS/JS/images).
 #	--spider stops wget from downloading the page.
 #	-nd, short for --no-directories, prevents wget from creating a hierarchy of directories on your server.
 #   -H --span-hosts \ # Include necessary assets from offsite as well.
@@ -245,12 +245,9 @@ echo $time_load_site
 }
 
 function site_links () {
-
 site=$1
-wget --spider --recursive --no-verbose --output-file=wgetlog.txt $site
-sed -n "s@.\+ URL:\([^ ]\+\) .\+@\1@p" wgetlog.txt | sed "s@&@\&amp;@" > sedlog.txt
-awk '!seen[$0]++' sedlog.txt > /dev/null #remove duplicate lines
-cat sedlog.txt | sort
+wget --spider --no-cache --recursive --no-verbose --output-file=$site.log $site
+cat $site.log | grep -o 'http[^"]*' | sort | uniq
 }
 
 
