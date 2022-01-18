@@ -2,7 +2,7 @@
 export ownip=$(hostname -I | awk '{print $1}')
 
 function aws_iid_tagname() {
-	aws_iid_tagname=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" \
+	aws_iid_tagname=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" "Name=instance-state-name,Values=running" \
 	--output text --query 'Reservations[*].Instances[*].InstanceId')
 	echo $aws_iid_tagname
 }
