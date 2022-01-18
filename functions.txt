@@ -19,7 +19,6 @@ aws ec2 describe-instances  \
 function aws_elastic_ips () {
 
 aws ec2 describe-addresses \
-	--filters Name=instance-state-name,Values=running \
 	--query 'Addresses[].{ instanceId: InstanceId, publicIp: PublicIp, allocationId: AllocationId, associationId: AssociationId, zone: NetworkBorderGroup }' \
 	--output text 
 
