@@ -251,7 +251,16 @@ wget --spider --no-cache --recursive --no-verbose --output-file=$site.log $site
 cat $site.log | grep -o 'http[^"]*' | sort | uniq
 }
 
+function jenkins_update () {
 
+cd /tmp
+sudo rm -f jenkins.war
+#wget http://mirrors.jenkins.io/war-stable/2.319.1/jenkins.war
+wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+sudo cp /usr/share/jenkins/jenkins.war /home/ubuntu/jenkins.war.bak
+sudo cp /tmp/jenkins.war /usr/share/jenkins/jenkins.war
+
+}
 
 
 
