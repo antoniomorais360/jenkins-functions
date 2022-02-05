@@ -76,7 +76,7 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
 
 ping_url=$response_code 
   
-  if [ "$response_code" != "200" ] && [ "$response_code" != "404" ] && [ "$response_code" != "401" ] && [ "$response_code" != "301" ] ; then
+  if [ "$response_code" != "200" ] && [ "$response_code" != "401" ] && [ "$response_code" != "301" ] ; then
 
 			printf "$1 is *** OFFLINE *** \n"
             false
