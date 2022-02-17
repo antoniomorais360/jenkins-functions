@@ -55,9 +55,7 @@ test_duration=5
 	
 	check_cpu=$cpuusage
 	
-	top10=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no $ipnumber top -b -n 1 | head -n 17)
-	
-	echo $top10
+	echo "$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no $ipnumber top -b -n 1 | head -n 17)"
 	
 	printf "$1 is using $cpuusage%% of CPU\n"
 
