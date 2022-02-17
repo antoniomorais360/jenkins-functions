@@ -55,6 +55,10 @@ test_duration=5
 	
 	check_cpu=$cpuusage
 	
+	top10=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no $ipnumber top -b -n 1 | head -n 17)
+	
+	echo $top10
+	
 	printf "$1 is using $cpuusage%% of CPU\n"
 
 }
@@ -184,6 +188,7 @@ dev_partition=$2
 }
 
 function run_reboot () {
+#ex: run_reboot 127.0.0.1
 
 ipnumber=$1
 linux_user=$2
