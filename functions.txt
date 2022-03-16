@@ -270,7 +270,7 @@ function manychat_add_subscriber() {
 #primeira tentativa
 retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
 -H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
--d "{\"first_name\":\"$1\",\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":\"$2\",\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
+-d "{\"first_name\":$1,\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":$2,\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
 
 ret_status=$(echo $retorno | jq .status)
 ret_msg=$(echo $retorno | jq .details.messages.whatsapp_phone.message | grep -oP '(?<=\").*?(?=\")')
@@ -289,7 +289,7 @@ ret_whatsapp=$(echo $retorno | jq .data.whatsapp_phone)
 			#segunda tentativa
 			retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
 			-H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
-			-d "{\"first_name\":\"$1\",\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":$whatsapp2,\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
+			-d "{\"first_name\":$1,\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":$whatsapp2,\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
 
 			ret_status=$(echo $retorno | jq .status)
 			ret_msg=$(echo $retorno | jq .details.messages.whatsapp_phone.message | grep -oP '(?<=\").*?(?=\")')
