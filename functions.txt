@@ -265,5 +265,19 @@ sudo cp /tmp/jenkins.war /usr/share/jenkins/jenkins.war
 
 }
 
+function manychat_add_subscriber() {
+
+retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
+-H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+-d "{\"first_name\":\"$nome\",\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":\"55$whatsapp\",\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
+
+ret_status=$(echo $retorno | jq .status)
+ret_msg=$(echo $retorno | jq .details.messages.whatsapp_phone.message | grep -oP '(?<=\").*?(?=\")')
+ret_id=$(echo $retorno | jq .data.id)
+
+echo nome:$nome ret_status:$ret_status ret_id:$ret_id ret_msg:$ret_msg
+
+}
+
 
 
