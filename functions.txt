@@ -282,7 +282,7 @@ ret_whatsapp=$(echo $retorno | jq .data.whatsapp_phone)
 		#qtde caracteres do telefone
 		lenzap=$(echo -n $2 | wc -m)
 		
-		if [ "$lenzap" -lt "11" ]; then
+		if [ "$lenzap" -lt "13" ]; then
 			whatsapp2=$(echo $2 | sed 's/./&9/3')
 			
 			#segunda tentativa
