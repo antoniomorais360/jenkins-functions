@@ -304,9 +304,17 @@ echo nome:$nome ret_status:$ret_status ret_id:$ret_id ret_msg:$ret_msg ret_whats
 
 }
 
+function manychat_set_custom_field () {
 
+# como usar:
+# manychat_set_custom_field "codigo_contato" "tipo_conteudo" "valor_conteudo"
+# ex: manychat_set_custom_field "1582121" "servico" "true"
+		
+	
+#	curl -X POST "https://api.manychat.com/fb/subscriber/setCustomField" -H  "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+#	-d "{\"subscriber_id\":$1,\"field_id\":$2,\"field_value\":\"$3"}"
 
-
+}
 
 
 
