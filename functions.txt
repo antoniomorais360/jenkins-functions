@@ -267,6 +267,7 @@ sudo cp /tmp/jenkins.war /usr/share/jenkins/jenkins.war
 
 function manychat_add_subscriber() {
 
+#primeira tentativa
 retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
 -H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
 -d "{\"first_name\":\"$1\",\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":\"$2\",\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
@@ -274,10 +275,61 @@ retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscrib
 ret_status=$(echo $retorno | jq .status)
 ret_msg=$(echo $retorno | jq .details.messages.whatsapp_phone.message | grep -oP '(?<=\").*?(?=\")')
 ret_id=$(echo $retorno | jq .data.id)
+ret_whatsapp=$(echo $retorno | jq .data.whatsapp_phone)
 
-echo nome:$nome ret_status:$ret_status ret_id:$ret_id ret_msg:$ret_msg
+	if [ "$ret_msg" = 'Phone number has invalid format' ] ; then
+		
+		#qtde caracteres do telefone
+		lenzap=$(echo -n $2 | wc -m)
+		
+		if [ "$lenzap" -lt "11" ]; then
+			whatsapp2=$(echo $2 | sed 's/./&9/3')
+			
+			#segunda tentativa
+			retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
+			-H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+			-d "{\"first_name\":\"$1\",\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":\"$whatsapp2\",\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
+
+			ret_status=$(echo $retorno | jq .status)
+			ret_msg=$(echo $retorno | jq .details.messages.whatsapp_phone.message | grep -oP '(?<=\").*?(?=\")')
+			ret_id=$(echo $retorno | jq .data.id)
+			ret_whatsapp=$(echo $retorno | jq .data.whatsapp_phone)
+
+		fi
+
+	fi
+
+echo nome:$nome ret_status:$ret_status ret_id:$ret_id ret_msg:$ret_msg ret_whatsapp:$ret_whatsapp 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
