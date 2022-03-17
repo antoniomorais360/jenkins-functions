@@ -277,7 +277,7 @@ ret_msg=$(echo $retorno | jq .details.messages.whatsapp_phone.message | grep -oP
 ret_id=$(echo $retorno | jq .data.id)
 ret_whatsapp=$(echo $retorno | jq .data.whatsapp_phone)
 
-	if [ "$ret_msg" = 'Phone number has invalid format' ] ; then
+	if [ "$ret_msg" = 'Phone number has invalid format' ]  ; then
 		
 		#qtde caracteres do telefone
 		lenzap=$(echo -n $2 | wc -m)
@@ -315,7 +315,11 @@ function manychat_set_custom_field () {
 	-d "{\"subscriber_id\":$1,\"field_id\":$2,\"field_value\":$3}"
 }
 
+function manychat_send_flow () {
 
+	curl -X POST "https://api.manychat.com/fb/sending/sendFlow" -H  "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+	-d "{\"subscriber_id\":$1,\"flow_ns\":\"$2\"}"
+}
 
 
 
