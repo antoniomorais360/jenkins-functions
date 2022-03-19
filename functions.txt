@@ -284,7 +284,7 @@ ret_whatsapp=$(echo $retorno | jq .data.whatsapp_phone)
 		
 		if [ "$lenzap" -lt "13" ]; then
 			#adiciona um 9 na posição 5
-			whatsapp2=$(echo $2 | sed 's/./&9/5')
+			whatsapp2=$(echo $2 | sed 's/./&9/4')
 			
 			#segunda tentativa
 			retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
