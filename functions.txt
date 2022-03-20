@@ -346,7 +346,18 @@ echo nome: $nome ret_status:$ret_status ret_id=$ret_id ret_msg:$ret_msg ret_what
 
 }
 
+function botconversa_set_custom_field () {
+#Ex: botconversa_set_custom_field $ret_id $cod_email $email
 
+ret_id=$1 
+cod_custom_field=$2
+value_custom_field=$3
+
+curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_id/custom_fields/$cod_custom_field/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" \
+ -H "Content-Type: application/json" -d "{\"value\":\"$value_custom_field\"}"
+
+
+}
 
 
 
