@@ -322,13 +322,15 @@ function manychat_send_flow () {
 }
 
 function botconversa_add_subscriber () {
-#Ex: botconversa_add_subscriber "+559281303000" "Antonio" "Morais Pereira"
+#Ex: botconversa_add_subscriber "+559281303000" "Antonio Morais Pereira"
 
 ret_whatsapp=$1
-nome=$(echo $2 $3)
+nome=$2
+primeiro_nome=$(echo $nome | awk -F' ' '{print $1}')
+resto_nome=$(echo $nome |  cut -d' ' -f2-)
 
-retorno=$(curl -X POST https://backend.botconversa.com.br/api/v1/webhook/subscriber/ -H 'accept: application/json' -H 'API-KEY: $BOTCONVERSA_APIKEY' -H 'Content-Type: application/json' \
--d '{ "phone": $1, "first_name": $2, "last_name": $3}')
+retorno=$(curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" -H "Content-Type: application/json" \
+-d '{ "phone": $1, "first_name": $primeiro_nome, "last_name": $resto_nome}')
 
 ret_msg=$(echo $retorno | jq .error_message)
 
@@ -353,13 +355,22 @@ ret_id=$1
 cod_custom_field=$2
 value_custom_field=$3
 
-curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_id/custom_fields/$cod_custom_field/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" \
- -H "Content-Type: application/json" -d "{\"value\":\"$value_custom_field\"}"
+curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_id/custom_fields/$cod_custom_field/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY"  -H "Content-Type: application/json" \
+-d "{\"value\":\"$value_custom_field\"}"
 
 
 }
 
+function botconversa_send_flow () {
+#Ex: botconversa_send_flow 123 852
 
+ret_id=$1 
+flow=$2
+
+curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_id/send_flow/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" -H "Content-Type: application/json" \
+-d "{ \"flow\": $flow}"
+
+}
 
 
 
