@@ -330,7 +330,7 @@ primeiro_nome=$(echo $nome | awk -F' ' '{print $1}')
 resto_nome=$(echo $nome |  cut -d' ' -f2-)
 
 retorno=$(curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" -H "Content-Type: application/json" \
--d '{ "phone": $1, "first_name": $primeiro_nome, "last_name": $resto_nome}')
+-d '{ \"phone\": $1, \"first_name\": $primeiro_nome, \"last_name\": $resto_nome}')
 
 ret_msg=$(echo $retorno | jq .error_message)
 
