@@ -353,7 +353,7 @@ else
 fi
 
 retorno=$(curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" -H "Content-Type: application/json" \
--d "{ \"phone\": \"$1\", \"first_name\": \"$primeiro_nome\", \"last_name\": \"$resto_nome\"}")
+-d "{ \"phone\": \"$ret_whatsapp\", \"first_name\": \"$primeiro_nome\", \"last_name\": \"$resto_nome\"}")
 
 ret_msg=$(echo $retorno | jq .error_message)
 
