@@ -332,7 +332,7 @@ primeiro_nome="$(echo $nome | awk -F' ' '{print $1}' |  tr '[:upper:]' '[:lower:
 resto_nome="$(echo $nome |  cut -d' ' -f2-)"
 
 #se o DDD for de 11 a 28, 14 digitos. Se for >28 whatsapp com 13 digitos.
-ddd=$(echo $ret_whatsapp | cut -c2-3)
+ddd=$(echo $ret_whatsapp | cut -c4-5)
 
 #tamanho telefone whatsapp 
 tam_whatsapp=${#ret_whatsapp}
