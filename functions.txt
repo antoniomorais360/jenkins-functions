@@ -326,18 +326,38 @@ function botconversa_add_subscriber () {
 
 ret_whatsapp=$1
 nome=$2
+
 #obtem nome e coloca a primeira letra maiúscula
 primeiro_nome="$(echo $nome | awk -F' ' '{print $1}' |  tr '[:upper:]' '[:lower:]' | sed 's/.*/\u&/' )"
 resto_nome="$(echo $nome |  cut -d' ' -f2-)"
+
+#se o DDD for de 11 a 28, 14 digitos. Se for >28 whatsapp com 13 digitos.
+ddd=$(echo $ret_whatsapp | cut -c2-3)
+
+#tamanho telefone whatsapp 
+tam_whatsapp=${#ret_whatsapp}
+
+if  [ $ddd -le 28 ]; then
+	if [ $tam_whatsapp -eq 13 ]; then 
+		#adiciona um 9 após a posição 5
+		ret_whatsapp=$(echo $ret_whatsapp | sed 's/./&9/5')
+		echo "9 adicionado"
+	fi
+else 
+	if [ $tam_whatsapp -eq 14 ]; then 
+		#remove o 9 na posição 6
+		ret_whatsapp=$(echo $ret_whatsapp | cut -c 1-5,7-99)
+		echo "9 removido"
+	fi
+ 
+fi
 
 retorno=$(curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" -H "Content-Type: application/json" \
 -d "{ \"phone\": \"$1\", \"first_name\": \"$primeiro_nome\", \"last_name\": \"$resto_nome\"}")
 
 ret_msg=$(echo $retorno | jq .error_message)
 
-
 ret_id=$(curl -X GET "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_whatsapp/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY" | jq .id)
-
 
 if [[ ! $ret_id ]]; then
 	ret_status="error"
@@ -346,7 +366,6 @@ else
 fi
 
 echo nome: $nome ret_status:$ret_status ret_id=$ret_id ret_msg:$ret_msg ret_whatsapp:$ret_whatsapp 
-
 
 }
 
