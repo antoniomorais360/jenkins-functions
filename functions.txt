@@ -325,7 +325,7 @@ function botconversa_add_subscriber () {
 #Ex: botconversa_add_subscriber "+559281303000" "Antonio Morais Pereira"
 
 ret_whatsapp=$1
-nome=$2
+nome=$(echo $2 | sed -i 's/"//g')
 primeiro_nome=$(echo $nome | awk -F' ' '{print $1}')
 resto_nome=$(echo $nome |  cut -d' ' -f2-)
 
