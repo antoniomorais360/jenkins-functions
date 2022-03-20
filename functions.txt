@@ -335,7 +335,7 @@ ret_msg=$(echo $retorno | jq .error_message)
 
 ret_id=$(curl -X GET "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_whatsapp/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY")
 
-if [[ ! $ret_msg ]]; then
+if [[ ! $ret_id ]]; then
 	ret_status="error"
 else
 	ret_status="success"
