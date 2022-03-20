@@ -321,7 +321,25 @@ function manychat_send_flow () {
 	-d "{\"subscriber_id\":$1,\"flow_ns\":\"$2\"}"
 }
 
+function botconversa_add_subscriber () {
+#Ex: botconversa_add_subscriber "+559281303000" "Antonio" "Morais Pereira"
 
+ret_whatsapp=$1
+nome=$(echo $2 $3)
+
+retorno=$(curl -X POST https://backend.botconversa.com.br/api/v1/webhook/subscriber/ -H 'accept: application/json' -H 'API-KEY: $BOTCONVERSA_APIKEY' -H 'Content-Type: application/json' \
+-d '{ "phone": $1, "first_name": $2, "last_name": $3}')
+
+ret_msg=$(echo $retorno | jq .error_message)
+
+
+ret_id=$(curl -X GET "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_whatsapp/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY")
+
+
+echo nome: $nome ret_id=$ret_id ret_msg:$ret_msg ret_whatsapp:$ret_whatsapp 
+
+
+}
 
 
 
