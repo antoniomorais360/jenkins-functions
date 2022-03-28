@@ -403,6 +403,8 @@ ret_id=$(echo $retorno | jq .id)
 function botconversa_num_whatsapp () {
 #Ex: botconversa_num_whatsapp 21968077564
 
+ret_whatsapp=$1
+
 #se o DDD for de 11 a 28, 14 digitos. Se for >28 whatsapp com 13 digitos.
 ddd=$(echo $ret_whatsapp | cut -c4-5)
 
