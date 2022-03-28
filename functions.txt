@@ -412,8 +412,9 @@ function botconversa_get_id () {
 
 phone=$1 
 
-ret_id=$(curl -X GET "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$phone/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY")
+retorno=$(curl -X GET "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$phone/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY")
 
+ret_id=$(echo $retorno | jq .id)
 
 }
 
