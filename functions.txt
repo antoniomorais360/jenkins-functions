@@ -396,7 +396,6 @@ phone=$1
 retorno=$(curl -X GET "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$phone/" -H "accept: application/json" -H "API-KEY: $BOTCONVERSA_APIKEY")
 
 ret_id=$(echo $retorno | jq .id)
-ret_status="success"
 
 }
 
