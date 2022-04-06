@@ -350,7 +350,6 @@ echo nome: $nome ret_status:$ret_status ret_id=$ret_id ret_msg:$ret_msg ret_what
 
 }
 
-
 function botconversa_send_flow () {
 #Ex: botconversa_send_flow 123 852
 
@@ -361,7 +360,6 @@ curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_
 -d "{ \"flow\": $flow}"
 
 }
-
 
 function botconversa_set_custom_field () {
 #Ex: botconversa_set_custom_field $ret_id $cod_email $email
@@ -375,7 +373,6 @@ curl -X POST "https://backend.botconversa.com.br/api/v1/webhook/subscriber/$ret_
 
 
 }
-
 
 function botconversa_set_tag () {
 #Ex: botconversa_set_tag $ret_id $cod_tag 
@@ -398,7 +395,6 @@ retorno=$(curl -X GET "https://backend.botconversa.com.br/api/v1/webhook/subscri
 ret_id=$(echo $retorno | jq .id)
 
 }
-
 
 function botconversa_num_whatsapp () {
 #Ex: botconversa_num_whatsapp 21968077564
@@ -428,6 +424,42 @@ fi
 
 
 }
+
+
+function trello_add_label () {
+#Ex: trello_add_label $card_id $label_id
+
+card_id=$1
+label_id=$2
+
+key=$TRELLO_API_KEY
+token=$TRELLO_API_TOKEN
+
+
+url=https://api.trello.com/1/cards/$card_id/idLabels?value=$label_id
+
+	curl --request POST \
+	--header "Content-Type: application/json" \
+	--data "{ \"key\": \"$key\", \"token\": \"$token\" }" \
+	--url $url
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
