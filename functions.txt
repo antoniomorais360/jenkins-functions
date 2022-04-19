@@ -78,7 +78,7 @@ response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeo
 
 ping_url=$response_code 
   
-  if [ "$response_code" != "200" ] && [ "$response_code" != "401" ] && [ "$response_code" != "301" ] ; then
+  if [ "$response_code" != "200" ] && [ "$response_code" != "401" ] && [ "$response_code" != "301" ] && [ "$response_code" != "302" ] ; then
 
 			printf "$1 is *** OFFLINE *** \n"
             false
@@ -424,7 +424,6 @@ fi
 
 
 }
-
 
 function trello_add_label () {
 #Ex: trello_add_label $card_id $label_id
