@@ -106,7 +106,7 @@ if [ "$hostip" = "localhost" ]; then
 	
 	check_hdd_free_space=$(df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]")
 else	
-	check_hdd_free_space=$(ssh -o StrictHostKeyChecking=no -o LogLevel=error $linux_user@$hostip sudo df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
+	check_hdd_free_space=$(ssh -u $linux_user -o StrictHostKeyChecking=no -o LogLevel=error $linux_user@$hostip sudo df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
 	#check_hdd_free_space=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no -o LogLevel=error $hostip df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
 fi;	
 
