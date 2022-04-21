@@ -96,6 +96,7 @@ function check_hdd_free_space() {
 instancename=$1
 hostip=$2
 pathvolume=$3
+linux_user=$4
 linux_user=${linux_user:-ubuntu}
 
 
