@@ -129,7 +129,7 @@ ipnumber=$1
 linux_user=$2
 linux_user=${linux_user:-ubuntu}
 
-cmd_run="sudo apt-get -y clean && sudo apt-get -y autoclean && sudo apt-get -y autoremove"
+cmd_run="sudo apt-get -y clean && sudo apt-get -y autoclean && sudo apt-get -y autoremove && sudo find /var/log/ -type f -mtime +7 -exec rm {} +"
 
 if [ "$ipnumber" == "$ownip" ]  
     then
@@ -148,7 +148,7 @@ linux_user=$2
 linux_user=${linux_user:-ubuntu}
 
 findpaths="sudo du -hs /*  --exclude=/mnt/*  --exclude=/proc/* --exclude=/usr/share/tomcat7/efs/* | sort -rh | head -10"
-findfiles="sudo find / -not -path '/mnt/*' -not -path '/proc/*' -not -path '/swapfile/*' -size +20M  -type f  -exec du -h  {} + | sort -r -h"
+findfiles="sudo find / -not -path '/mnt/*' -not -path '/proc/*' -not -path '/swapfile/*'  -not -path '/usr/share/tomcat7/efs/*' -size +20M  -type f  -exec du -h --exclude=/mnt/*  --exclude=/proc/* --exclude=/usr/share/tomcat7/efs/* {} + | sort -r -h"
 
 
 if [ "$ipnumber" == "$ownip" ]  
