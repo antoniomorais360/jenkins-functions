@@ -154,10 +154,10 @@ findfiles="sudo find / -not -path '/mnt/*' -not -path '/proc/*' -not -path '/swa
 if [ "$ipnumber" == "$ownip" ]  
     then
 		eval $findpaths
-		eval $findfiles
+		#eval $findfiles
 	else
       sudo -u $linux_user ssh -o LogLevel=error $ipnumber $findpaths
-	  sudo -u $linux_user ssh -o LogLevel=error $ipnumber $findfiles
+	  #sudo -u $linux_user ssh -o LogLevel=error $ipnumber $findfiles
  fi
     
 }
@@ -426,6 +426,29 @@ fi
 
 
 }
+
+
+function trello_add_card () {
+#Ex: trello_add_card 
+
+list_id=$1
+name_card=$2
+desc_card=$3
+
+key=$TRELLO_API_KEY
+token=$TRELLO_API_TOKEN
+
+url=https://api.trello.com/1/cards?idList=$list_id&name='$name_card'&desc='$desc_card'
+
+	trello_id=$(curl --request POST \
+	--header "Content-Type: application/json" \
+	--data "{ \"key\": \"$key\", \"token\": \"$token\" }" \
+	--url $url | jq .id)
+
+ echo trello_id
+
+}
+
 
 function trello_add_label () {
 #Ex: trello_add_label $card_id $label_id
