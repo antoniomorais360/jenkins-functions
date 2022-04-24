@@ -427,7 +427,6 @@ fi
 
 }
 
-
 function trello_add_card () {
 #Ex: trello_add_card 
 
@@ -446,10 +445,9 @@ url="https://api.trello.com/1/cards?idList=$list_id&pos=top&closed=false"
 	--data "{ \"key\": \"$key\", \"token\": \"$token\",  \"desc\": \"$desc_card\" , \"name\": \"$name_card\"   }" | jq .id)
 
 trello_id=$(echo $trello_id |  sed 's/"//g')
- echo $trello_id
+echo $trello_id
 
 }
-
 
 function trello_add_label () {
 #Ex: trello_add_label $card_id $label_id
@@ -470,7 +468,22 @@ url=https://api.trello.com/1/cards/$card_id/idLabels?value=$label_id
  
 }
 
+function trello_move_to_list () {
 
+trello_id=$1
+list_id=$2
+
+key=$TRELLO_API_KEY
+token=$TRELLO_API_TOKEN
+
+url="https://api.trello.com/1/cards/$trello_id?idList=$list_id"
+     
+	curl --request PUT \
+	--header "Content-Type: application/json" \
+	--url $url \
+	--data "{ \"key\": \"$key\", \"token\": \"$token\"  }" 
+
+}
 
 
 
