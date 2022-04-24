@@ -416,7 +416,7 @@ if  [ $ddd -le 28 ]; then
 		echo "9 adicionado"
 	fi
 	
-	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/9')
+	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/10')
 else 
 	if [ $tam_whatsapp -eq 14 ]; then 
 		#remove o 9 na posição 6
@@ -424,7 +424,7 @@ else
 		echo "9 removido"
 	fi
 	
-	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/8') 
+	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/9') 
 fi
 
 
