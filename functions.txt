@@ -445,8 +445,8 @@ url="https://api.trello.com/1/cards?idList=$list_id&pos=top&closed=false"
 	--url $url \
 	--data "{ \"key\": \"$key\", \"token\": \"$token\",  \"desc\": \"$desc_card\" , \"name\": \"$name_card\"   }" | jq .id)
 
-
- echo trello_id
+trello_id=$(echo $trello_id |  sed 's/"//g')
+ echo $trello_id
 
 }
 
