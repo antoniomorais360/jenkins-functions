@@ -442,8 +442,9 @@ url="https://api.trello.com/1/cards?idList=$list_id&name='$name_card'&desc='$des
 
 	trello_id=$(curl --request POST \
 	--header "Content-Type: application/json" \
-	--data "{ \"key\": \"$key\", \"token\": \"$token\" }" \
-	--url $url | jq .id)
+	--url $url \
+	--data "{ \"key\": \"$key\", \"token\": \"$token\",  \"desc\": \"$desc_card\" , \"name\": \"$name_card\"   }" | jq .id)
+
 
  echo trello_id
 
