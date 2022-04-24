@@ -485,7 +485,27 @@ url="https://api.trello.com/1/cards/$trello_id?idList=$list_id"
 
 }
 
+function trello_set_custom_field() {
+#https://developer.atlassian.com/cloud/trello/guides/rest-api/getting-started-with-custom-fields/
 
+
+card_id=$1
+custom_field_id=$2
+custom_field_type=$3 #text, number, date, checked
+custom_field_value=$4
+
+key=$TRELLO_API_KEY
+token=$TRELLO_API_TOKEN
+
+url="https://api.trello.com/1/cards/$card_id/customField/$custom_field_id/item"
+    
+	curl --request PUT \
+	--header "Content-Type: application/json" \
+	--url $url \
+	--data "{ \"key\": \"$key\", \"token\": \"$token\",  \"value\": {\"$custom_field_type\": \"$custom_field_value\"}   }" 
+
+
+}
 
 
 
