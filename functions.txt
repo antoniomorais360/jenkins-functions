@@ -517,8 +517,10 @@ card_id=$1
 key=$TRELLO_API_KEY
 token=$TRELLO_API_TOKEN
 
+url="https://api.trello.com/1/cards/$card_id?key=$key&token=$token"
+
 curl --request GET \
-  --url 'https://api.trello.com/1/cards/$card_id?key=$key&token=$token' \
+  --url $url \
   --header 'Accept: application/json'
 
 }
