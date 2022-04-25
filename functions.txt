@@ -510,8 +510,36 @@ url="https://api.trello.com/1/cards/$card_id/customField/$custom_field_id/item"
 
 }
 
+function trello_get_card () {
 
+card_id=$1
 
+key=$TRELLO_API_KEY
+token=$TRELLO_API_TOKEN
+
+curl --request GET \
+  --url 'https://api.trello.com/1/cards/$card_id?key=$key&token=$token' \
+  --header 'Accept: application/json'
+
+}
+
+#function trello_update_card () {
+#Ex: trello_add_card 
+
+#key=$TRELLO_API_KEY
+#token=$TRELLO_API_TOKEN
+
+#url="https://api.trello.com/1/cards"
+
+#	curl --request PUT \
+#	--header "Accept: application/json" \
+#	--url $url \
+#	--data "{ \"key\": \"$key\", \"token\": \"$token\",  \"desc\": \"$desc_card\" , \"name\": \"$name_card\"   }" 
+
+#trello_id=$(echo $trello_id |  sed 's/"//g')
+#echo $trello_id
+
+#}
 
 
 
