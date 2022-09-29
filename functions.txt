@@ -114,6 +114,29 @@ printf "$check_hdd_free_space%%\n"
 
 }
 
+function check_hdd_speed() {
+
+#Example: check_hdd_speed "Wordpress" 192.168.0.1 /
+
+instancename=$1
+hostip=$2
+pathvolume=$3
+linux_user=$4
+linux_user=${linux_user:-ubuntu}
+
+echo $instancename - $hostip
+
+if [ "$hostip" = "localhost" ]; then
+	
+	check_hdd_speed=$(sudo hdparm -Tt /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }')
+else	
+	check_hdd_speed=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no -o LogLevel=error $hostip sudo hdparm -Tt /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }' )
+fi;	
+
+printf "$check_hdd_speed\n"
+
+}
+
 function check_ssl_expire() {
 site=$1
 PORT="443"
