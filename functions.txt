@@ -125,6 +125,7 @@ linux_user=$4
 linux_user=${linux_user:-ubuntu}
 
 echo $instancename - $hostip
+echo $instancename - $hostip
 
 if [ "$hostip" = "localhost" ]; then
 	
@@ -144,6 +145,23 @@ PORT="443"
 date --date="$(echo | openssl s_client -servername $site -connect $site:$PORT  2>/dev/null \
 	| openssl x509 -noout -enddate | awk -F '=' '{print $NF}' )" --iso-8601
 	
+}
+
+function run_hdd_warmup () {
+#https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-initialize.html#ebs-initialize-linux
+
+ipnumber=$1
+linux_user=$2
+linux_user=${linux_user:-ubuntu}
+
+cmd_run="sudo apt install -y fio && sudo fio --filename=/dev/nvme0n1p1 --rw=read --bs=128k --iodepth=32 --ioengine=libaio --direct=1 --name=volume-initialize"
+
+if [ "$ipnumber" == "$ownip" ]  
+    then
+		eval $cmd_run
+	else
+      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $cmd_run  
+ fi
 }
 
 function run_hdd_clean_up () {
