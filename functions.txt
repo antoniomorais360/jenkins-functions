@@ -129,9 +129,9 @@ echo $instancename - $hostip
 
 if [ "$hostip" = "localhost" ]; then
 	
-	check_hdd_speed=$(sudo hdparm -Tt /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }')
+	check_hdd_speed=$(sudo hdparm -t /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }')
 else	
-	check_hdd_speed=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no -o LogLevel=error $hostip sudo hdparm -Tt /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }' )
+	check_hdd_speed=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no -o LogLevel=error $hostip sudo hdparm -t /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }' )
 fi;	
 
 printf "$check_hdd_speed\n"
