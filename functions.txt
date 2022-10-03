@@ -11,7 +11,7 @@ function aws_running_instances () {
 
 aws ec2 describe-instances  \
 	--filter "Name=instance-state-name,Values=running" \
-	--query "Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, InstanceType, State.Name, Tags[?Key=='Name'].Value|[0],Tags[?Key=='SO'].Value|[0], AZ:Placement.AvailabilityZone]" \
+	--query "Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, PublicIpAddress, InstanceType, State.Name, Tags[?Key=='Name'].Value|[0],Tags[?Key=='SO'].Value|[0], Placement.AvailabilityZone]" \
 	--output text 
 
 }
