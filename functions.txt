@@ -154,7 +154,8 @@ ipnumber=$1
 linux_user=$2
 linux_user=${linux_user:-ubuntu}
 
-cmd_run="sudo apt install -y fio && sudo fio --filename=/dev/nvme0n1p1 --rw=read --bs=128k --iodepth=32 --ioengine=libaio --direct=1 --name=volume-initialize"
+#cmd_run="sudo apt install -y fio && sudo fio --filename=/dev/nvme0n1p1 --rw=read --bs=128k --iodepth=32 --ioengine=libaio --direct=1 --name=volume-initialize"
+cmd_run="sudo dd if=/dev/nvme0n1p1 of=/dev/null bs=1M"
 
 if [ "$ipnumber" == "$ownip" ]  
     then
@@ -298,11 +299,14 @@ cat $site.log | grep -o 'http[^"]*' | sort | uniq
 }
 
 function jenkins_update () {
+#Exemplo jenkins_update 2.346.1
+
+newversion=$1
 
 cd /tmp
 sudo rm -f jenkins.war
-#wget http://mirrors.jenkins.io/war-stable/2.319.1/jenkins.war
-wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+wget http://mirrors.jenkins.io/war-stable/$newversion/jenkins.war
+#wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
 sudo cp /usr/share/jenkins/jenkins.war /home/ubuntu/jenkins.war.bak
 sudo cp /tmp/jenkins.war /usr/share/jenkins/jenkins.war
 
