@@ -70,11 +70,12 @@ url2check=$2
 
 #PING url variables
 connecttimeout=20
+maxtime=$(( $connecttimeout + 5 ))
 
 echo 
 echo Testing $1
 
-response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeout $connecttimeout --no-keepalive --output /dev/null  $url2check`
+response_code=`curl --insecure --write-out %{http_code} --silent --connect-timeout $connecttimeout --max-time $maxtime --no-keepalive --output /dev/null  $url2check`
 
 ping_url=$response_code 
   
@@ -226,6 +227,23 @@ dev_partition=$2
 	df -h
 	sudo growpart /dev/$dev_name 1
 	sudo resize2fs /dev/$dev_partition
+
+}
+
+function aws_unused_security_groups () {
+
+# all groups
+aws ec2 describe-security-groups \
+  | jq --raw-output '.SecurityGroups[] | [.GroupName, .GroupId] | @tsv' \
+  | sort > /tmp/sg.all
+
+# groups in use
+aws ec2 describe-network-interfaces \
+  | jq --raw-output '.NetworkInterfaces[].Groups[] | [.GroupName, .GroupId] | @tsv' \
+  | sort \
+  | uniq > /tmp/sg.in.use
+
+diff /tmp/sg.all /tmp/sg.in.use |grep "<" |cut -d ' ' -f2-3
 
 }
 
@@ -569,6 +587,7 @@ curl --request GET \
   --header 'Accept: application/json'
 
 }
+
 
 #function trello_update_card () {
 #Ex: trello_add_card 
