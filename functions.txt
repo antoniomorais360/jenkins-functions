@@ -49,7 +49,7 @@ linux_user=${linux_user:-ubuntu}
 test_duration=5
 
 
-	cpu_idle=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpu_idle=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
 	
@@ -108,7 +108,7 @@ if [ "$hostip" = "localhost" ]; then
 	check_hdd_free_space=$(df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]")
 else	
 	#check_hdd_free_space=$(ssh -o StrictHostKeyChecking=no -o LogLevel=error $linux_user@$hostip sudo df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
-	check_hdd_free_space=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no -o LogLevel=error $hostip df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
+	check_hdd_free_space=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $hostip df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
 fi;	
 
 printf "$check_hdd_free_space%%\n"
@@ -132,7 +132,7 @@ if [ "$hostip" = "localhost" ]; then
 	
 	check_hdd_speed=$(sudo hdparm -t /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }')
 else	
-	check_hdd_speed=$(sudo -u $linux_user ssh -o StrictHostKeyChecking=no -o LogLevel=error $hostip sudo hdparm -t /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }' )
+	check_hdd_speed=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $hostip sudo hdparm -t /dev/nvme0n1 | grep "disk reads:" | awk '{ print $11 }' )
 fi;	
 
 printf "$check_hdd_speed\n"
@@ -228,6 +228,14 @@ dev_partition=$2
 	sudo growpart /dev/$dev_name 1
 	sudo resize2fs /dev/$dev_partition
 
+}
+
+
+function aws_unsecurity_groups () {
+aws ec2 describe-security-groups \
+    --filters Name=ip-permission.from-port,Values=22 Name=ip-permission.to-port,Values=22 Name=ip-permission.cidr,Values='0.0.0.0/0' \
+    --query "SecurityGroups[*].[GroupName]" \
+    --output text
 }
 
 function aws_unused_security_groups () {
