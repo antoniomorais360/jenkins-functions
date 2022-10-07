@@ -162,7 +162,7 @@ if [ "$ipnumber" == "$ownip" ]
     then
 		eval $cmd_run
 	else
-      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $cmd_run  
+      sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $ipnumber $cmd_run  
  fi
 }
 
@@ -178,7 +178,7 @@ if [ "$ipnumber" == "$ownip" ]
     then
 		eval $cmd_run
 	else
-      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $cmd_run  
+      sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $ipnumber $cmd_run  
  fi
 }
 
@@ -199,7 +199,7 @@ if [ "$ipnumber" == "$ownip" ]
 		eval $findpaths
 		#eval $findfiles
 	else
-      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $findpaths
+      sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $ipnumber $findpaths
 	  #sudo -u $linux_user ssh -o LogLevel=error $ipnumber $findfiles
  fi
     
@@ -268,7 +268,7 @@ if [ "$ipnumber" == "$ownip" ]
     then
 		sudo $cmd_run
 	else
-      sudo -u $linux_user ssh -o LogLevel=error $ipnumber $cmd_run
+      sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $ipnumber $cmd_run
  fi
 }
 
