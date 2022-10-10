@@ -82,7 +82,7 @@ ping_url=$response_code
   if [ "$response_code" != "200" ] && [ "$response_code" != "401" ] && [ "$response_code" != "301" ] && [ "$response_code" != "302" ] ; then
 
 			printf "$1 is *** OFFLINE *** \n"
-            false
+
   else
   	printf "$1 is ONLINE ($response_code)\n"
     echo ""
