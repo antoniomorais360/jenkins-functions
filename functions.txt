@@ -49,7 +49,7 @@ linux_user=${linux_user:-ubuntu}
 test_duration=5
 
 
-	cpu_idle=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpu_idle=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
 	
@@ -111,7 +111,7 @@ else
 	check_hdd_free_space=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $hostip df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
 fi;	
 
-printf "$1 $check_hdd_free_space%%\n"
+printf "$1 $2 $check_hdd_free_space%%\n"
 
 }
 
