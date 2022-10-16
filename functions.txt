@@ -49,13 +49,13 @@ linux_user=${linux_user:-ubuntu}
 test_duration=5
 
 
-	cpu_idle=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpu_idle=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o LogLevel=error -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
 	
 	check_cpu=$cpuusage
 	
-	echo "$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $ipnumber top -b -n 1 | head -n 17)"
+	echo "$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o LogLevel=error -o StrictHostKeyChecking=no $ipnumber top -b -n 1 | head -n 17)"
 	
 	printf "$1 is using $cpuusage%% of CPU\n"
 
