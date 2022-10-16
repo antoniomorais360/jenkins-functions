@@ -111,7 +111,7 @@ else
 	check_hdd_free_space=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $hostip df $pathvolume | grep -o "[0-9][0-9]"% |  grep -o "[0-9][0-9]" )
 fi;	
 
-printf "$check_hdd_free_space%%\n"
+printf "$1 $check_hdd_free_space%%\n"
 
 }
 
