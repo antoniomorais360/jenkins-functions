@@ -619,7 +619,7 @@ if [ "$ret" == "$value" ]
 		echo Tudo certo com o serviço $service $ret
 	else
 
-		printf "Erro. O esperado era $value mas o resultado foi $ret\n"
+		printf "Erro no serviço $service. O esperado era $value mas o resultado foi $ret\n"
 		exit 1
  fi
 
