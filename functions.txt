@@ -599,27 +599,28 @@ curl --request GET \
 
 function check_docker_status () {
 
-#Example: check_docker_status "Wordpress" 192.168.0.1 /
+#Example: check_docker_status 192.168.0.1 "2/2"
 
 ipnumber=$1
-expected=$2
-linux_user=$3
+service=$2
+value=$3
+linux_user=$4
 linux_user=${linux_user:-ubuntu}
 
 
-cmd_run=docker service ls | grep fox_mail_worker_email | awk '{ print $4 }'
+cmd_run=docker service ls | grep $service | awk '{ print $4 }'
  
  
 ret=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $ipnumber $cmd_run) 
 
 
 
-if [ "$ret" == "$expected" ]  
+if [ "$ret" == "$value" ]  
     then
 		echo Tudo certo
 	else
 		echo Deu ruim
-		printf "O esperado era $expected mas o resultado foi $ret\n"
+		printf "O esperado era $value mas o resultado foi $ret\n"
 		exit 1
  fi
 
