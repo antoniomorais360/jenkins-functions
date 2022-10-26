@@ -604,11 +604,10 @@ function check_docker_status () {
 ipnumber=$1
 service=$2
 value=$3
-linux_user=$4
-linux_user=${linux_user:-ubuntu}
+linux_user=ubuntu
 
 
-cmd_run="docker service ls | grep $service | awk \'{ print \$4 }\'"
+cmd_run="docker service ls | grep $service | awk '{ print \$4 }' "
  
  
 ret=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $ipnumber $cmd_run) 
