@@ -616,7 +616,7 @@ ret=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyCh
 
 if [ "$ret" == "$value" ]  
     then
-		echo Tudo certo com o serviço $service
+		echo Tudo certo com o serviço $service $ret
 	else
 
 		printf "Erro. O esperado era $value mas o resultado foi $ret\n"
