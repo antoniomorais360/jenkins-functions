@@ -599,7 +599,7 @@ curl --request GET \
 
 function check_docker_status () {
 
-#Example: check_docker_status 192.168.0.1 "2/2"
+#Example: check_docker_status 192.168.0.1 fox_mail_worker_email "2/2"
 
 ipnumber=$1
 service=$2
@@ -608,7 +608,7 @@ linux_user=$4
 linux_user=${linux_user:-ubuntu}
 
 
-cmd_run=docker service ls | grep $service | awk '{ print $4 }'
+cmd_run="docker service ls | grep $service | awk '{ print $4 }'"
  
  
 ret=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=error $ipnumber $cmd_run) 
