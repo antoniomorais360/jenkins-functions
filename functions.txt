@@ -87,7 +87,7 @@ ping_url=$response_code
   else
   	printf "$1 is ONLINE ($response_code)\n"
     ret_ping=0
-	echo ""
+
   fi;
 
 }
