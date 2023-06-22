@@ -86,7 +86,8 @@ ping_url=$response_code
 
   else
   	printf "$1 is ONLINE ($response_code)\n"
-    echo ""
+    ret_ping=0
+	echo ""
   fi;
 
 }
@@ -207,6 +208,7 @@ if [ "$ipnumber" == "$ownip" ]
 }
 
 function run_hdd_deletions () {
+#sudo find /mnt/backup/pgdump/ -type f -mtime +360 -name amp-fox_producao.* -exec rm -f {} \;
 
 folder=$1
 filename=$2
@@ -220,6 +222,9 @@ function aws_expand_hdd () {
 
 #to be used after resize image in instance-state-name
 #Ex: aws_expand_hdd nvme0n1 nvme0n1p1
+#dev_name=nvme0n1 && dev_partition=nvme0n1p1
+
+
 dev_name=$1
 dev_partition=$2
 
@@ -325,16 +330,17 @@ cat $site.log | grep -o 'http[^"]*' | sort | uniq
 }
 
 function jenkins_update () {
-#Exemplo jenkins_update 2.346.1
+#Exemplo jenkins_update 2.401.1
 
 newversion=$1
+pathwar=
 
 cd /tmp
 sudo rm -f jenkins.war
 wget http://mirrors.jenkins.io/war-stable/$newversion/jenkins.war
 #wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
-sudo cp /usr/share/jenkins/jenkins.war /home/ubuntu/jenkins.war.bak
-sudo cp /tmp/jenkins.war /usr/share/jenkins/jenkins.war
+sudo cp /usr/share/java/jenkins.war /home/ubuntu/jenkins.war.bak
+sudo cp /tmp/jenkins.war /usr/share/java/jenkins.war
 
 }
 
@@ -595,7 +601,6 @@ curl --request GET \
   --header 'Accept: application/json'
 
 }
-
 
 function check_docker_status () {
 
