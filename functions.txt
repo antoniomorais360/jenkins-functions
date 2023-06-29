@@ -397,7 +397,7 @@ email=$3
 #primeira tentativa
 retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
 -H  "Authorization: Bearer $MANYCHAT_APIKEY" -H  "Content-Type: application/json" \
--d "{\"first_name\":$nome,\"last_name\":\"\",\"phone\":\"$wpp\",\"whatsapp_phone\":\"$wpp\",\"email\":$email,\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
+-d "{\"first_name\":\"$nome\",\"last_name\":\"\",\"phone\":\"$wpp\",\"whatsapp_phone\":\"$wpp\",\"email\":$email,\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
 
 
 ret_status=$(echo $retorno | jq .status)
@@ -441,6 +441,21 @@ function manychat_set_custom_field () {
 	
 	curl -X POST "https://api.manychat.com/fb/subscriber/setCustomField" -H  "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_APIKEY" -H  "Content-Type: application/json" \
 	-d "{\"subscriber_id\":$1,\"field_id\":$2,\"field_value\":$3}"
+}
+
+function manychat_set_tag () {
+#Ex: botconversa_set_tag $ret_id $cod_tag 
+
+ret_id=$1 
+cod_tag=$2
+
+	curl -X POST "https://api.manychat.com/fb/subscriber/addTag" -H "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_APIKEY" -H "Content-Type: application/json" \
+	-d '{
+  "subscriber_id": $ret_id,
+  "tag_id": $cod_tag
+}'
+
+
 }
 
 function manychat_send_flow () {
