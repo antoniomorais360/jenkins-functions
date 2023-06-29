@@ -344,11 +344,54 @@ sudo cp /tmp/jenkins.war /usr/share/java/jenkins.war
 
 }
 
+function manychat_num_whatsapp () {
+#Ex: manychat_num_whatsapp 21968077564
+
+ret_whatsapp=$1
+
+#se o DDD for de 11 a 28, 14 digitos. Se for >28 whatsapp com 13 digitos.
+ddd=$(echo $ret_whatsapp | cut -c4-5)
+
+#tamanho telefone whatsapp 
+tam_whatsapp=${#ret_whatsapp}
+
+if  [ $ddd -le 28 ]; then
+	if [ $tam_whatsapp -eq 13 ]; then 
+		#adiciona um 9 após a posição 5
+		ret_whatsapp=$(echo $ret_whatsapp | sed 's/./&9/5')
+		echo "9 adicionado"
+	fi
+	
+	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/10')
+else 
+	if [ $tam_whatsapp -eq 14 ]; then 
+		#remove o 9 na posição 6
+		ret_whatsapp=$(echo $ret_whatsapp | cut -c 1-5,7-99)
+		echo "9 removido"
+	fi
+	
+	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/9') 
+fi
+
+
+}
+
+function manychat_get_id () {
+#Ex: manychat_get_id $phone 
+
+phone=$1 
+
+retorno=$(curl -X GET "https://api.manychat.com/fb/subscriber/findByCustomField?field_id=$num_whatsapp" -H "accept: application/json" -H "Authorization: Bearer $MANYCHAT_APIKEY")
+
+ret_id=$(echo $retorno | jq .id)
+
+}
+
 function manychat_add_subscriber() {
 
 #primeira tentativa
 retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
--H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+-H  "Authorization: Bearer $MANYCHAT_APIKEY" -H  "Content-Type: application/json" \
 -d "{\"first_name\":$1,\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":$2,\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
 
 ret_status=$(echo $retorno | jq .status)
@@ -367,7 +410,7 @@ ret_whatsapp=$(echo $retorno | jq .data.whatsapp_phone)
 			
 			#segunda tentativa
 			retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
-			-H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+			-H  "Authorization: Bearer $MANYCHAT_APIKEY" -H  "Content-Type: application/json" \
 			-d "{\"first_name\":$1,\"last_name\":\"\",\"phone\":\"\",\"whatsapp_phone\":$whatsapp2,\"email\":\"\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
 
 			ret_status=$(echo $retorno | jq .status)
@@ -390,7 +433,7 @@ function manychat_set_custom_field () {
 # ex: manychat_set_custom_field "1582121" "servico" "true"
 		
 	
-	curl -X POST "https://api.manychat.com/fb/subscriber/setCustomField" -H  "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+	curl -X POST "https://api.manychat.com/fb/subscriber/setCustomField" -H  "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_APIKEY" -H  "Content-Type: application/json" \
 	-d "{\"subscriber_id\":$1,\"field_id\":$2,\"field_value\":$3}"
 }
 
