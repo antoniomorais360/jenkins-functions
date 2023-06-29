@@ -373,7 +373,6 @@ else
 	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/9') 
 fi
 
-
 }
 
 function manychat_get_id () {
@@ -397,7 +396,7 @@ email=$3
 #primeira tentativa
 retorno=$(curl -s -X POST "https://api.manychat.com/fb/subscriber/createSubscriber" -H  "accept: application/json" \
 -H  "Authorization: Bearer $MANYCHAT_APIKEY" -H  "Content-Type: application/json" \
--d "{\"first_name\":\"$nome\",\"last_name\":\"\",\"phone\":\"$wpp\",\"whatsapp_phone\":\"$wpp\",\"email\":$email,\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
+-d "{\"first_name\":\"$nome\",\"last_name\":\"\",\"phone\":\"$wpp\",\"whatsapp_phone\":\"$wpp\",\"email\":\"$email\",\"gender\":\"string\",\"has_opt_in_sms\":true,\"has_opt_in_email\":true,\"consent_phrase\":\"string\"}")
 
 
 ret_status=$(echo $retorno | jq .status)
