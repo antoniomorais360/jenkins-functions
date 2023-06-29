@@ -381,7 +381,7 @@ function manychat_get_id () {
 
 phone=$1 
 
-retorno=$(curl -X GET "https://api.manychat.com/fb/subscriber/findByCustomField?field_id=$num_whatsapp" -H "accept: application/json" -H "Authorization: Bearer $MANYCHAT_APIKEY")
+retorno=$(curl -X GET "https://api.manychat.com/fb/subscriber/findByCustomField?field_id=$num_whatsapp&field_value=$phone" -H "accept: application/json" -H "Authorization: Bearer $MANYCHAT_APIKEY")
 
 ret_id=$(echo $retorno | jq .id)
 
