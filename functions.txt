@@ -366,8 +366,8 @@ if  [ $ddd -le 28 ]; then
 else 
 	if [ $tam_whatsapp -eq 14 ]; then 
 		#remove o 9 na posição 6
-		ret_whatsapp=$(echo $ret_whatsapp | cut -c 1-5,7-99)
-		echo "9 removido"
+		#ret_whatsapp=$(echo $ret_whatsapp | cut -c 1-5,7-99)
+		#echo "9 removido"
 	fi
 	
 	ret_whatsapp_form=$(echo "("$ret_whatsapp | sed  's/+55//g' | sed 's/./&) /3' | sed 's/./&-/9') 
