@@ -439,7 +439,7 @@ function manychat_set_custom_field () {
 
 function manychat_send_flow () {
 
-	curl -X POST "https://api.manychat.com/fb/sending/sendFlow" -H  "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_TOKEN" -H  "Content-Type: application/json" \
+	curl -X POST "https://api.manychat.com/fb/sending/sendFlow" -H  "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_APIKEY" -H  "Content-Type: application/json" \
 	-d "{\"subscriber_id\":$1,\"flow_ns\":\"$2\"}"
 }
 
