@@ -445,13 +445,8 @@ function manychat_set_custom_field () {
 function manychat_set_tag () {
 #Ex: botconversa_set_tag $ret_id $cod_tag 
 
-
 	curl -X POST "https://api.manychat.com/fb/subscriber/addTag" -H "accept: application/json" -H  "Authorization: Bearer $MANYCHAT_APIKEY" -H "Content-Type: application/json" \
-	-d '{
-  "subscriber_id": $1,
-  "tag_id": $2
-}'
-
+	-d "{\"subscriber_id\": $1, \"tag_id\": $2}"
 
 }
 
