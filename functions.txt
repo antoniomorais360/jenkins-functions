@@ -1,5 +1,7 @@
 
+export aws_instance_id=$(ec2metadata --instance-id)
 export ownip=$(hostname -I | awk '{print $1}')
+export aws_volume_id=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=$aws_instance_id | jq '.Volumes[].VolumeId' | sed -e 's/\"//g')
 
 function aws_iid_tagname() {
 	aws_iid_tagname=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" "Name=instance-state-name,Values=running" \
@@ -49,7 +51,7 @@ linux_user=${linux_user:-ubuntu}
 test_duration=5
 
 
-	cpu_idle=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o LogLevel=error -o StrictHostKeyChecking=no $ipnumber mpstat $test_duration 1 | tail -1 |awk '{print int($12)}')
+	cpu_idle=$(sudo -u $linux_user ssh -o UserKnownHostsFile=/dev/null -o LogLevel=error -o StrictHostKeyChecking=no $ipnumber mpstat 1 $test_duration | tail -1 |awk '{print int($12)}')
 	cpuusage=$(echo 100 - $cpu_idle | bc)
 	cpuusage=$(echo ${cpuusage%,*})
 	
@@ -90,6 +92,15 @@ ping_url=$response_code
 
   fi;
 
+}
+
+function check_ssl_expire() {
+site=$1
+PORT="443"
+
+date --date="$(echo | openssl s_client -servername $site -connect $site:$PORT  2>/dev/null \
+	| openssl x509 -noout -enddate | awk -F '=' '{print $NF}' )" --iso-8601
+	
 }
 
 function check_hdd_free_space() {
@@ -139,15 +150,6 @@ fi;
 
 printf "$check_hdd_speed\n"
 
-}
-
-function check_ssl_expire() {
-site=$1
-PORT="443"
-
-date --date="$(echo | openssl s_client -servername $site -connect $site:$PORT  2>/dev/null \
-	| openssl x509 -noout -enddate | awk -F '=' '{print $NF}' )" --iso-8601
-	
 }
 
 function run_hdd_warmup () {
@@ -223,10 +225,21 @@ function aws_expand_hdd () {
 #to be used after resize image in instance-state-name
 #Ex: aws_expand_hdd nvme0n1 nvme0n1p1
 #dev_name=nvme0n1 && dev_partition=nvme0n1p1
+#Se não tiver partições, use apenas: sudo resize2fs /dev/xvdf1
 
 
 dev_name=$1
+dev_name=${dev_name:-nvme0n1}
 dev_partition=$2
+dev_partition=${dev_partition:-nvme0n1p1}
+
+#root_hdd_size=$(df -h | grep root | awk '{print $2}' |  sed -e 's/\G//g')
+#new_root_hdd_size=$(echo "var=$root_hdd_size;var*=1.1;var" | bc | awk '{printf("%.0f\n",$1 + 1)}')
+
+#aws_volume_id=$(aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=$aws_instance_id | jq '.Volumes[].VolumeId' | sed -e 's/\"//g')
+#aws ec2 modify-volume --size $new_root_hdd_size --volume-id $aws_volume_id
+
+
 
 	sudo apt install cloud-guest-utils
 	lsblk
@@ -337,10 +350,10 @@ pathwar=
 
 cd /tmp
 sudo rm -f jenkins.war
-wget http://mirrors.jenkins.io/war-stable/$newversion/jenkins.war
-#wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
-sudo cp /usr/share/java/jenkins.war /home/ubuntu/jenkins.war.bak
-sudo cp /tmp/jenkins.war /usr/share/java/jenkins.war
+wget https://mirrors.jenkins.io/war-stable/$newversion/jenkins.war
+#wget https://mirrors.jenkins.io/war-stable/latest/jenkins.war
+sudo cp /usr/share/jenkins/jenkins.war /home/ubuntu/jenkins.2.332.1.war.bak
+sudo cp /tmp/jenkins.war /usr/share/jenkins/jenkins.war
 
 }
 
@@ -704,7 +717,21 @@ if [ "$ret" == "$value" ]
 
 #}
 
+function linux_alterar_swap () {
 
+#Aumentar Swap para 6gb
+#uso linux_alterar_swap 6
+
+mem_desejada=$1
+
+sudo swapoff -a
+sudo dd if=/dev/zero of=/swapfile bs=1G count=$mem_desejada
+sudo chmod 0600 /swapfile
+sudo mkswap /swapfile 
+sudo swapon /swapfile
+free -h
+
+}
 
 
 
